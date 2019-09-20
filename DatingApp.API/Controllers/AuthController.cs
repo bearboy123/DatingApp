@@ -8,6 +8,8 @@ using DatingApp.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
+using System;
 
 namespace DatingApp.API.Controllers
 {
@@ -20,7 +22,7 @@ namespace DatingApp.API.Controllers
         private readonly IAuthRepository repo;
         public AuthController(IAuthRepository repo, IConfiguration config)
         {
-            this.config = config;
+ 
 
             this.repo = repo;
         }
@@ -49,7 +51,7 @@ namespace DatingApp.API.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserForLoginDto userForLoginDto)
         {
-
+           
             var userFromRepo = await repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
 
             if (userFromRepo == null)
