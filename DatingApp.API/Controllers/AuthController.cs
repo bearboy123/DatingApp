@@ -25,6 +25,7 @@ namespace DatingApp.API.Controllers
  
 
             this.repo = repo;
+            this.config =config;
         }
 
         [HttpPost("register")]
