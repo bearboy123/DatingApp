@@ -6,10 +6,11 @@ using DatingApp.API.Data;
 using DatingApp.API.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using DatingApp.API.Helpers;
 
 namespace DatingApp.API.Controllers
 {
-
+    [ServiceFilter(typeof(LogUserActivity))]
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
@@ -32,23 +33,24 @@ namespace DatingApp.API.Controllers
             return Ok(usersToReturn);
         }
 
-        [HttpGet("{id}", Name ="GetUser")]
+        [HttpGet("{id}", Name = "GetUser")]
         public async Task<IActionResult> GetUser(int id)
         {
             var user = await repo.GetUser(id);
             var userToReturn = mapper.Map<UserForDetailedDto>(user);
             return Ok(userToReturn);
         }
-        
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto){
-            if(id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
-            return Unauthorized();
+        public async Task<IActionResult> UpdateUser(int id, UserForUpdateDto userForUpdateDto)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
 
             var userFromRepo = await repo.GetUser(id);
-            mapper.Map(userForUpdateDto,userFromRepo);
-            if( await repo.SaveAll())
-            return NoContent();
+            mapper.Map(userForUpdateDto, userFromRepo);
+            if (await repo.SaveAll())
+                return NoContent();
 
             throw new System.Exception($"Update user {id} failed on save");
         }
