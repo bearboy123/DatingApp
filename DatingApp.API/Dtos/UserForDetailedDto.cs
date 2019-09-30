@@ -4,7 +4,7 @@ using DatingApp.API.Models;
 
 namespace DatingApp.API.Dtos
 {
-    public class UserForDetailsDto
+    public class UserForDetailedDto
     {
     
         public int Id { get; set; }
